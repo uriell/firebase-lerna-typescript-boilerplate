@@ -32,7 +32,7 @@ jobs:
         run: yarn install
         if: steps.lerna_cache.outputs.cache-hit != 'true'
       - name: Install inner package dependencies
-        run: yarn run bootstrap
+        run: yarn run bootstrap --scope ${{ matrix.firebase_component }}
         if: steps.lerna_cache.outputs.cache-hit != 'true'
       - name: Deploy ${{ matrix.firebase_component }} to Firebase
         run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}

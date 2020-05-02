@@ -23,7 +23,8 @@
     "test:ci": "CI=true yarn test --watchAll=false",
     "format:all:ts": "yarn format:ts --check \"src/**/*.ts\"",
     "format:ts": "prettier",
-    "format": "yarn format:all:ts"
+    "format": "yarn format:all:ts",
+    "decide-deployment": "node decide-deployment.js"
   },
   "dependencies": {
     "firebase-admin": "8.11.0",
