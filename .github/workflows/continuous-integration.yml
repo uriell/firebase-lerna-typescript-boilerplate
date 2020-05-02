@@ -12,25 +12,21 @@ jobs:
       matrix:
         script: ['lint', 'format', 'build', 'test:ci']
     steps:
-      - uses: actions/checkout@v2
-        name: Checkout the code
-      - uses: actions/setup-node@v1
-        name: Setup node v10.x environment
-        with:
-          node-version: '10.x'
-      - uses: actions/cache@master
-        name: Restore lerna-style dependencies
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Restore lerna-style dependencies
+        uses: actions/cache@master
         id: lerna_cache
         with:
           path: |
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn
-        name: Install root package dependencies
+      - name: Install root package dependencies
+        run: yarn
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - run: yarn bootstrap
-        name: Install inner package dependencies
+      - name: Install inner package dependencies
+        run: yarn bootstrap
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - run: yarn ${{ matrix.script }}
-        name: Run ${{ matrix.script }} on inner packages code
+      - name: Run ${{ matrix.script }} on inner packages code
+        run: yarn run ${{ matrix.script }}
