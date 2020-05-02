@@ -1,6 +1,6 @@
 const ts = require('typescript');
 
-console.log(process.env.GITHUB_TOKEN.length);
+console.log(typeof process.env.GITHUB_TOKEN);
 
 function parse(code = '', filename = 'astExplorer.ts') {
   const program = ts.createProgram([filename], {}, {
