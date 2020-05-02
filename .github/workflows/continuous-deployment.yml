@@ -31,4 +31,4 @@ jobs:
       - run: yarn deploy:ci --token=$FIREBASE_TOKEN
         name: Deploy inner packages code
         env:
-          super_secret: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
