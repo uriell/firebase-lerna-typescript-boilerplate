@@ -1,9 +1,8 @@
 {
-  "name": "plugdj-clone-mvp",
+  "name": "firebase-lerna-boilerplate",
   "version": "0.1.0",
-  "description": "a plug.dj clone made with firebase and react",
-  "repository": "git@github.com:UriellViana/plugdj-clone-mvp.git",
-  "author": "Uriell <uriellarttusviana+github@gmail.com>",
+  "description": "a firebase mono repo project",
+  "repository": "git@github.com:UriellViana/firebase-lerna-boilerplate.git",
   "license": "MIT",
   "private": true,
   "scripts": {
