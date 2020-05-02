@@ -23,7 +23,7 @@ async function getCodeFilesChanged() {
   const codeFilesRegex = /^(src|package\.json|yarn\.lock|tsconfig\.json)/;
 
   return files
-    .map((file) => file.filename.replace(/^packages\/functions\/?/, ''))
+    .map((file) => file.filename.replace(/^packages\/functions\//, ''))
     .filter((filename) => codeFilesRegex.test(filename));
 }
 
@@ -40,7 +40,7 @@ function processChangedFiles(filepaths) {
   return '';
 }
 
-console.log(getCodeFilesChanged().then(console.log).catch(console.error));
+getCodeFilesChanged().then(console.log).catch(console.error);
 
 function parse(code = '', filename = 'astExplorer.ts') {
   const host = {
