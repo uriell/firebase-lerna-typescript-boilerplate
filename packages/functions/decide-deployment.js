@@ -20,11 +20,21 @@ async function getCodeFilesChanged() {
   const compareUrl = getCompareUrl(COMPARE_URL, BEFORE_SHA, AFTER_SHA);
   const { files } = await fetchGithub(compareUrl, GITHUB_TOKEN);
 
-  const codeFilesRegex = /^packages\/functions\/(src|package\.json|yarn\.lock|tsconfig\.json)/;
+  const codeFilesRegex = /^(src|package\.json|yarn\.lock|tsconfig\.json)/;
 
   return files
-    .map((file) => file.filename)
+    .map((file) => file.filename.replace(/^packages\/functions\/?/, ''))
     .filter((filename) => codeFilesRegex.test(filename));
+}
+
+function processChangedFiles(filepaths) {
+  const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts)$/;
+
+  if (filepaths.some(filepath => completeDeploymentRegex.test(filepath))) return '';
+
+  for (let filepath of filepaths) {
+    if (completeDeploymentRegex.test())
+  }
 }
 
 console.log(getCodeFilesChanged().then(console.log).catch(console.error));
