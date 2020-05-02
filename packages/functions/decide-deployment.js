@@ -27,7 +27,7 @@ async function getCodeFilesChanged() {
     .filter((filename) => codeFilesRegex.test(filename));
 }
 
-console.log(getFilesChanged().then(console.log).catch(console.error));
+console.log(getCodeFilesChanged().then(console.log).catch(console.error));
 
 function parse(code = '', filename = 'astExplorer.ts') {
   const host = {
