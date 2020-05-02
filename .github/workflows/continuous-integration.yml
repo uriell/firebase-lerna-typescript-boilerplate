@@ -13,8 +13,10 @@ jobs:
 #        script: ['lint', 'format', 'build', 'test:ci']
         script: ['lint']
     steps:
-      - name: DEBUG
-        run: echo ${{ github.event_path }}
+      - name: DEBUG 1
+        run: echo ${{ toJSON(github.event) }}
+      - name: DEBUG 2
+        run: cat ${{ github.event_path }}
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
