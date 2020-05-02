@@ -1,6 +1,7 @@
 {
   "name": "functions",
   "main": "lib/index.js",
+  "version": "0.1.0",
   "private": true,
   "engines": {
     "node": "10"
