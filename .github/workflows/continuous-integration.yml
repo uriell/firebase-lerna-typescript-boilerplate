@@ -9,13 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        name: Checkout the code
       - uses: actions/setup-node@v1
+        name: Setup node v10.x environment
         with:
           node-version: '10.x'
+      - uses: actions/cache@v1
+        name: Restore lerna-style dependencies
+        id: lerna_cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - run: yarn
         name: Install root package dependencies
+        if: steps.lerna_cache.outputs.cache-hit != 'true'
       - run: yarn bootstrap
         name: Install inner package dependencies
+        if: steps.lerna_cache.outputs.cache-hit != 'true'
       - run: yarn lint
         name: Lint inner packages code
       - run: yarn format
