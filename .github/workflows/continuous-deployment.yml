@@ -14,20 +14,20 @@ jobs:
         name: Setup node v10.x environment
         with:
           node-version: '10.x'
+      - run: echo "::set-output name=dir::$(yarn cache dir)"
+        name: Get yarn cache directory path
+        id: yarn-cache-dir-path
       - uses: actions/cache@master
         name: Restore lerna-style dependencies
-        id: lerna_cache
         with:
-          path: |
-            node_modules
-            */*/node_modules
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - run: yarn
         name: Install root package dependencies
-        if: steps.lerna_cache.outputs.cache-hit != 'true'
       - run: yarn bootstrap
         name: Install inner package dependencies
-        if: steps.lerna_cache.outputs.cache-hit != 'true'
       - run: yarn deploy:ci --token=$FIREBASE_TOKEN
         name: Deploy inner packages code
         env:

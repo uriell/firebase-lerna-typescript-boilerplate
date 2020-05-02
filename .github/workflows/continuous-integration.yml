@@ -31,7 +31,7 @@ jobs:
       - run: yarn lint
         name: Lint inner packages code
       - run: yarn format
-        name: Formatt inner packages code
+        name: Format inner packages code
       - run: yarn build
         name: Build inner packages code
       - run: yarn test:ci
