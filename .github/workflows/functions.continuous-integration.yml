@@ -1,0 +1,39 @@
+name: CI (Functions)
+on:
+  push:
+    branches-ignore:
+      - master
+    paths:
+      - 'packages/functions/**'
+jobs:
+  install-dependencies:
+    name: "Install >"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        scope: ['functions']
+        script: ['lint', 'format', 'build', 'test:ci']
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Setup node v10.x environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Restore lerna-style dependencies
+        uses: actions/cache@master
+        id: lerna_cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install root package dependencies
+        run: yarn install
+        if: steps.lerna_cache.outputs.cache-hit != 'true'
+      - name: Install inner package dependencies
+        run: yarn bootstrap
+        if: steps.lerna_cache.outputs.cache-hit != 'true'
+      - name: Run ${{ matrix.script }} on inner packages code
+        run: yarn run ${{ matrix.script }} --scope ${{ matrix.scope }}
