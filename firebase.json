@@ -1,0 +1,60 @@
+{
+  "storage": {
+    "rules": "firebase/storage.rules"
+  },
+  "firestore": {
+    "rules": "firebase/firestore.rules",
+    "indexes": "firebase/firestore.indexes.json"
+  },
+  "functions": {
+    "source": "packages/functions",
+    "predeploy": [
+      "yarn --cwd \"$RESOURCE_DIR\" lint",
+      "yarn --cwd \"$RESOURCE_DIR\" format",
+      "yarn --cwd \"$RESOURCE_DIR\" build",
+      "yarn --cwd \"$RESOURCE_DIR\" test:ci"
+    ]
+  },
+  "hosting": {
+    "public": "packages/hosting/build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "source": "packages/hosting",
+    "predeploy": [
+      "yarn --cwd \"$RESOURCE_DIR\" lint",
+      "yarn --cwd \"$RESOURCE_DIR\" format",
+      "yarn --cwd \"$RESOURCE_DIR\" build",
+      "yarn --cwd \"$RESOURCE_DIR\" test:ci"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0"
+          }
+        ]
+      }
+    ]
+  },
+  "emulators": {
+    "hosting": {
+      "port": "3000"
+    },
+    "functions": {
+      "port": "3001"
+    },
+    "firestore": {
+      "port": "3002"
+    },
+    "pubsub": {
+      "port": "3003"
+    }
+  }
+}

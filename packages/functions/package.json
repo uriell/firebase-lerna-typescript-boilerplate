@@ -1,0 +1,60 @@
+{
+  "name": "functions",
+  "main": "lib/index.js",
+  "private": true,
+  "engines": {
+    "node": "10"
+  },
+  "scripts": {
+    "build": "tsc",
+    "preserve": "yarn build",
+    "preshell": "yarn build",
+    "serve": "yarn firebase serve --only functions",
+    "shell": "yarn firebase functions:shell",
+    "start": "yarn serve",
+    "firebase": "yarn --cwd ../.. firebase",
+    "deploy": "yarn --cwd ../.. deploy --only functions",
+    "logs": "yarn firebase functions:log",
+    "lint:ts": "eslint",
+    "lint:all:ts": "yarn lint:ts \"src/**/*.ts\"",
+    "lint": "yarn lint:all:ts",
+    "test": "jest --passWithNoTests --watchAll --silent --coverage",
+    "test:ci": "CI=true yarn test --watchAll=false",
+    "format:all:ts": "yarn format:ts --check \"src/**/*.ts\"",
+    "format:ts": "prettier",
+    "format": "yarn format:all:ts"
+  },
+  "dependencies": {
+    "firebase-admin": "8.11.0",
+    "firebase-functions": "3.6.1"
+  },
+  "devDependencies": {
+    "@types/jest": "25.2.1",
+    "@typescript-eslint/eslint-plugin": "2.30.0",
+    "@typescript-eslint/parser": "2.30.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-prettier": "3.1.3",
+    "firebase-functions-test": "0.2.1",
+    "jest": "25.5.3",
+    "prettier": "2.0.5",
+    "ts-jest": "25.4.0",
+    "typescript": "3.8.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "resetMocks": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/sharedObjects.ts",
+      "!src/**/constants.ts",
+      "!src/**/index.ts",
+      "!**/*.json",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": [
+      "text"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "react-app",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint",
+    "prettier/react",
+    "plugin:jest/recommended"
+  ],
+  "rules": {
+    "prefer-const": "error",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "block-like" }
+    ]
+  }
+}

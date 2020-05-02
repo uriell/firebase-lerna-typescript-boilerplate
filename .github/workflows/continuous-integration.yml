@@ -1,0 +1,32 @@
+name: Continuous Integration
+on: [push]
+jobs:
+  build:
+    name: "Install, Lint, Format, Build, Test & Deploy"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: yarn
+        name: Install root package dependencies
+      - run: yarn bootstrap
+        name: Install inner package dependencies
+      - run: yarn lint
+        name: Lint inner packages code
+        if: github.ref != 'master'
+      - run: yarn format
+        name: Formatt inner packages code
+        if: github.ref != 'master'
+      - run: yarn build
+        name: Build inner packages code
+        if: github.ref != 'master'
+      - run: yarn test:ci
+        name: Test inner packages code
+        if: github.ref != 'master'
+      - run: yarn deploy:ci --token=$FIREBASE_TOKEN
+        name: Deploy inner packages code
+        if: github.ref == 'master'
+        env:
+          super_secret: ${{ secrets.FIREBASE_TOKEN }}

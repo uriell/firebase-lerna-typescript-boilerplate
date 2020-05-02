@@ -1,0 +1,44 @@
+{
+  "name": "plugdj-clone-mvp",
+  "version": "0.1.0",
+  "description": "a plug.dj clone made with firebase and react",
+  "repository": "git@github.com:UriellViana/plugdj-clone-mvp.git",
+  "author": "Uriell <uriellarttusviana+github@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "firebase": "firebase",
+    "deploy": "firebase deploy",
+    "deploy:ci": "firebase deploy --non-interactive --force",
+    "shell": "firebase functions:shell",
+    "lerna": "lerna",
+    "bootstrap": "lerna bootstrap",
+    "start": "lerna run start",
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "format": "lerna run format",
+    "test:ci": "lerna run test:ci"
+  },
+  "devDependencies": {
+    "firebase-tools": "8.2.0",
+    "husky": "4.2.5",
+    "lerna": "3.20.2",
+    "lint-staged": "10.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "packages/hosting/src/**/*.{ts,tsx}": [
+      "yarn --cwd packages/hosting format:ts --write",
+      "yarn --cwd packages/hosting lint:ts --fix",
+      "yarn --cwd packages/hosting lint:css --fix"
+    ],
+    "packages/functions/src/**/*.ts": [
+      "yarn --cwd packages/functions format:ts --write",
+      "yarn --cwd packages/functions lint:ts --fix"
+    ]
+  }
+}
