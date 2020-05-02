@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        script: [lint, format, build, test:ci]
+        script: ['lint', 'format', 'build', 'test:ci']
     steps:
       - uses: actions/checkout@v2
         name: Checkout the code
