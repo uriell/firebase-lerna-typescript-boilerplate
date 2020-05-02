@@ -1,11 +1,11 @@
-name: CI
+name: CD
 on:
   push:
-    branches-ignore:
+    branches:
       - master
 jobs:
   build:
-    name: "Install/Lint/Format/Build/Test"
+    name: "Install/Pre-Deploy/Deploy"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,11 +16,7 @@ jobs:
         name: Install root package dependencies
       - run: yarn bootstrap
         name: Install inner package dependencies
-      - run: yarn lint
-        name: Lint inner packages code
-      - run: yarn format
-        name: Formatt inner packages code
-      - run: yarn build
-        name: Build inner packages code
-      - run: yarn test:ci
-        name: Test inner packages code
+      - run: yarn deploy:ci --token=$FIREBASE_TOKEN
+        name: Deploy inner packages code
+        env:
+          super_secret: ${{ secrets.FIREBASE_TOKEN }}
