@@ -5,30 +5,34 @@ on:
       - master
 jobs:
   deploy:
-    name: "Install/Pre-Deploy/Deploy"
+    name: "Install > Deploy"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        firebase_component: ['hosting', 'functions', 'firestore', 'storage']
     steps:
-      - uses: actions/checkout@v2
-        name: Checkout the code
-      - uses: actions/setup-node@v1
-        name: Setup node v10.x environment
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Setup node v10.x environment
+        uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - uses: actions/cache@master
-        name: Restore lerna-style dependencies
+      - name: Restore lerna-style dependencies
+        uses: actions/cache@master
         id: lerna_cache
         with:
           path: |
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn
-        name: Install root package dependencies
+      - name: Install root package dependencies
+        run: yarn install
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - run: yarn bootstrap
-        name: Install inner package dependencies
+      - name: Install inner package dependencies
+        run: yarn run bootstrap
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - run: yarn deploy:ci --token=$FIREBASE_TOKEN
-        name: Deploy inner packages code
+      - name: Deploy ${{ matrix.firebase_component }} to Firebase
+        run: yarn deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
