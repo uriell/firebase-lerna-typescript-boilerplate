@@ -1,6 +1,8 @@
 name: CD (Storage)
 on:
   push:
+    branches:
+      - master
     paths:
       - 'firebase/storage.rules'
 jobs:
