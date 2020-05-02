@@ -19,7 +19,8 @@
     "build": "lerna run build",
     "lint": "lerna run lint",
     "format": "lerna run format",
-    "test:ci": "lerna run test:ci"
+    "test:ci": "lerna run test:ci",
+    "decide-deployment": "lerna run decide-deployment"
   },
   "devDependencies": {
     "firebase-tools": "8.2.0",
