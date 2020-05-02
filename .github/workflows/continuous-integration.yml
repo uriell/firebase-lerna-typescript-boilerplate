@@ -10,8 +10,11 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        script: ['lint', 'format', 'build', 'test:ci']
+#        script: ['lint', 'format', 'build', 'test:ci']
+        script: ['lint']
     steps:
+      - name: DEBUG
+        run: echo ${{ github.event }}
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
