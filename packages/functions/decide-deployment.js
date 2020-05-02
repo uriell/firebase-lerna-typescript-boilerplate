@@ -16,11 +16,15 @@ const fetchGithub = (url, authToken, options = {}) =>
     },
   }).then((res) => res.json());
 
-async function getFilesChanged() {
+async function getCodeFilesChanged() {
   const compareUrl = getCompareUrl(COMPARE_URL, BEFORE_SHA, AFTER_SHA);
   const { files } = await fetchGithub(compareUrl, GITHUB_TOKEN);
 
-  return files.map((file) => file.filename);
+  const codeFilesRegex = /^packages\/functions\/(src|package\.json|yarn\.lock|tsconfig\.json)/;
+
+  return files
+    .map((file) => file.filename)
+    .filter((filename) => codeFilesRegex.test(filename));
 }
 
 console.log(getFilesChanged().then(console.log).catch(console.error));
