@@ -14,7 +14,7 @@ jobs:
         name: Setup node v10.x environment
         with:
           node-version: '10.x'
-      - uses: actions/cache@v1
+      - uses: actions/cache@master
         name: Restore lerna-style dependencies
         id: lerna_cache
         with:
