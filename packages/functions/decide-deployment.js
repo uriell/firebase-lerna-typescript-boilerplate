@@ -30,11 +30,14 @@ async function getCodeFilesChanged() {
 function processChangedFiles(filepaths) {
   const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts)$/;
 
-  if (filepaths.some(filepath => completeDeploymentRegex.test(filepath))) return '';
+  if (filepaths.some((filepath) => completeDeploymentRegex.test(filepath)))
+    return '';
 
-  for (let filepath of filepaths) {
-    if (completeDeploymentRegex.test())
-  }
+  // for (let filepath of filepaths) {
+
+  // }
+
+  return '';
 }
 
 console.log(getCodeFilesChanged().then(console.log).catch(console.error));
