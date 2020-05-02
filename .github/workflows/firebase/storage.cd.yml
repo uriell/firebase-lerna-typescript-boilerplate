@@ -1,0 +1,33 @@
+name: CD (Storage)
+on:
+  push:
+    paths:
+      - 'firebase/storage.rules'
+jobs:
+  deploy:
+    name: "Install > Deploy"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        firebase_component: ['storage']
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Setup node v10.x environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Restore root package dependencies
+        uses: actions/cache@master
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Install root package dependencies
+        run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Deploy ${{ matrix.firebase_component }} to Firebase
+        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
