@@ -35,6 +35,9 @@ jobs:
       - name: Decide functions to update
         run: yarn run decide-deployment --scope ${{ matrix.firebase_component }}
         env:
+          COMPARE_URL: ${{ github.event.repository.compare_url }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
           GITHUB_TOKEN: ${{ github.token }}
       - name: Deploy ${{ matrix.firebase_component }} to Firebase
         run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}
