@@ -1,8 +1,10 @@
-name: CI
+name: CI (Hosting)
 on:
   push:
     branches-ignore:
       - master
+    paths:
+      - 'packages/hosting/**'
 jobs:
   install-dependencies:
     name: "Install >"
@@ -10,19 +12,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-#        script: ['lint', 'format', 'build', 'test:ci']
-        script: ['lint']
+        scope: ['hosting']
+        script: ['lint', 'format', 'build', 'test:ci']
     steps:
-      - name: Get compare URL
-        id: compare_url
-        run: echo "::set-output name=compare_url::${{ github.event.repository.compare_url }}" | sed 's/{base}/${{ github.event.before }}/g' | sed 's/{head}/${{ github.event.after }}/g'
-      - name: DEBUG compare URL
-        run: echo ${{ steps.compare_url.outputs.compare_url }}
-      # - name: DEBUG 1
-      #   run: |
-      #     curl --request GET \
-      #     --url ${{ github.event.repository.compare_url }} \
-      #     --header 'authorization: Bearer ${{ github.token }}'
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
@@ -44,4 +36,4 @@ jobs:
         run: yarn bootstrap
         if: steps.lerna_cache.outputs.cache-hit != 'true'
       - name: Run ${{ matrix.script }} on inner packages code
-        run: yarn run ${{ matrix.script }}
+        run: yarn run ${{ matrix.script }} --scope ${{ matrix.scope }}
