@@ -1,0 +1,38 @@
+name: CD (Functions)
+on:
+  push:
+    paths:
+      - 'packages/functions/**'
+jobs:
+  deploy:
+    name: "Install > Deploy"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        firebase_component: ['functions']
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Setup node v10.x environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Restore lerna-style dependencies
+        uses: actions/cache@master
+        id: lerna_cache
+        with:
+          path: |
+            node_modules
+            packages/functions/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('packages/functions/yarn.lock') }}
+      - name: Install root package dependencies
+        run: yarn install
+        if: steps.lerna_cache.outputs.cache-hit != 'true'
+      - name: Install inner package dependencies
+        run: yarn run bootstrap
+        if: steps.lerna_cache.outputs.cache-hit != 'true'
+      - name: Deploy ${{ matrix.firebase_component }} to Firebase
+        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
