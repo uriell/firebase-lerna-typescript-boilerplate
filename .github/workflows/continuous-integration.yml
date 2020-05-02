@@ -14,7 +14,7 @@ jobs:
         script: ['lint']
     steps:
       - name: DEBUG
-        run: echo ${{ github.event }}
+        run: echo ${{ github.event_path }}
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
