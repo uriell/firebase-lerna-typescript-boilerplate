@@ -27,8 +27,8 @@ jobs:
         with:
           path: |
             node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+            packages/functions/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('packages/functions/yarn.lock') }}
       - name: Install root package dependencies
         run: yarn install
         if: steps.lerna_cache.outputs.cache-hit != 'true'
