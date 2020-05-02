@@ -34,8 +34,8 @@ jobs:
         if: steps.lerna_cache.outputs.cache-hit != 'true'
       - name: Decide functions to update
         run: yarn run decide-deployment --scope ${{ matrix.firebase_component }}
-        with:
-          test_var: 'Hello World'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Deploy ${{ matrix.firebase_component }} to Firebase
         run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}
         env:
