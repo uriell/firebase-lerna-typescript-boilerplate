@@ -5,6 +5,9 @@
   "repository": "git@github.com:UriellViana/firebase-lerna-boilerplate.git",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
     "firebase": "firebase",
     "deploy": "firebase deploy",
