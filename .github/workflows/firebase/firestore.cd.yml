@@ -5,6 +5,7 @@ on:
       - master
     paths:
       - 'firebase/firestore.rules'
+      - 'firebase/firestore.indexes.json'
 jobs:
   deploy:
     name: "Install > Deploy"
