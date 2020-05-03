@@ -41,6 +41,6 @@ jobs:
           AFTER_SHA: ${{ github.event.after }}
           GITHUB_TOKEN: ${{ github.token }}
       - name: Deploy ${{ matrix.firebase_component }} to Firebase
-        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}${{ steps.functions_changed.output.functions_changed }}
+        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}${{ steps.functions_changed.outputs.functions_changed }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
