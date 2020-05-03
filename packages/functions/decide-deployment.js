@@ -53,8 +53,6 @@ function findFunctionsChanged(originPaths, references) {
     );
   }
 
-  console.log(functionsChanged);
-
   const functionNames = functionsChanged
     .map((filepath) => path.basename(filepath, path.extname(filepath)))
     .filter((item, index, arr) => arr.indexOf(item) === index);
@@ -82,8 +80,6 @@ function processChangedFiles(filepaths) {
     )
     .map(([origin, refFiles]) => [origin, refFiles.map((ref) => ref.file)])
     .reduce((acc, [origin, targets]) => ({ ...acc, [origin]: targets }), {});
-
-  console.log(changedFilepaths);
 
   return findFunctionsChanged(changedFilepaths, relativeReferences);
 }
