@@ -47,6 +47,9 @@ function findFunctionsChanged(originPaths, references) {
     ...dependents.filter((filepath) => functionFileRegex.test(filepath))
   );
 
+  console.info(nonFunctionDependents);
+  console.info(functionsChanged);
+
   if (nonFunctionDependents.length) {
     functionsChanged.push(
       ...findFunctionsChanged(nonFunctionDependents, references)
@@ -57,13 +60,13 @@ function findFunctionsChanged(originPaths, references) {
     .map((filepath) => path.basename(filepath, path.extname(filepath)))
     .filter((item, index, arr) => arr.indexOf(item) === index);
 
+  console.info(functionNames);
+
   return functionNames;
 }
 
 function processChangedFiles(filepaths) {
   const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts|src\/functions\/index\.ts)$/;
-
-  console.info(filepaths);
 
   if (filepaths.some((filepath) => completeDeploymentRegex.test(filepath)))
     return '';
@@ -82,8 +85,6 @@ function processChangedFiles(filepaths) {
     )
     .map(([origin, refFiles]) => [origin, refFiles.map((ref) => ref.file)])
     .reduce((acc, [origin, targets]) => ({ ...acc, [origin]: targets }), {});
-
-  console.info(changedFilepaths);
 
   return findFunctionsChanged(changedFilepaths, relativeReferences);
 }
