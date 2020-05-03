@@ -1,5 +1,7 @@
 const ts = require('typescript');
 const fetch = require('node-fetch');
+const path = require('path');
+const glob = require('glob');
 
 const { COMPARE_URL, BEFORE_SHA, AFTER_SHA, GITHUB_TOKEN } = process.env;
 
@@ -27,36 +29,64 @@ async function getCodeFilesChanged() {
     .filter((filename) => codeFilesRegex.test(filename));
 }
 
+function findFunctionsChanged(originPaths, references) {
+  const functionsChanged = [];
+  const functionFileRegex = /src\/functions/;
+
+  const dependents = originPaths
+    .map((filepath) => references[filepath])
+    .filter(Boolean)
+    .reduce((acc, arr) => acc.concat(arr), [])
+    .filter((item, index, arr) => arr.indexOf(item) === index);
+
+  const nonFunctionDependents = dependents.filter(
+    (filepath) => !functionFileRegex.test(filepath)
+  );
+
+  functionsChanged.push(
+    ...dependents.filter((filepath) => functionFileRegex.test(filepath))
+  );
+
+  if (nonFunctionDependents.length) {
+    functionsChanged.push(
+      ...findFunctionsChanged(nonFunctionDependents, references)
+    );
+  }
+
+  const functionNames = functionsChanged.map((filepath) =>
+    path.basename(filepath, path.extname(filepath))
+  );
+
+  return functionNames;
+}
+
 function processChangedFiles(filepaths) {
   const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts)$/;
 
   if (filepaths.some((filepath) => completeDeploymentRegex.test(filepath)))
     return '';
 
-  // for (let filepath of filepaths) {
+  const changedFilepaths = filepaths.map((filepath) => path.resolve(filepath));
+  const functionFiles = glob.sync('src/functions/!(index).ts');
+  const tsProgram = ts.createProgram(functionFiles, {});
+  const refFileMap = tsProgram.getRefFileMap();
+  const relativeReferences = [...refFileMap.entries()]
+    .filter((pair) =>
+      pair[1].every(
+        (ref) =>
+          !ref.file.includes('node_modules') &&
+          !ref.referencedFileName.includes('node_modules')
+      )
+    )
+    .map(([origin, refFiles]) => [origin, refFiles.map((ref) => ref.file)])
+    .reduce((acc, [origin, targets]) => ({ ...acc, [origin]: targets }), {});
 
-  // }
-
-  return '';
+  return (
+    ':' + findFunctionsChanged(changedFilepaths, relativeReferences).join(',')
+  );
 }
 
-getCodeFilesChanged().then(console.log).catch(console.error);
-
-function parse(code = '', filename = 'astExplorer.ts') {
-  const host = {
-    fileExists: () => true,
-    getCanonicalFileName: (filename) => filename,
-    getCurrentDirectory: () => '',
-    getDefaultLibFileName: () => 'lib.d.ts',
-    getNewLine: () => '\n',
-    getSourceFile: (filename) =>
-      ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true),
-    readFile: () => null,
-    useCaseSensitiveFileNames: () => true,
-    writeFile: () => null,
-  };
-
-  const program = ts.createProgram([filename], {}, host);
-
-  return program.getSourceFile(filename);
-}
+getCodeFilesChanged()
+  .then(processChangedFiles)
+  .then(console.log)
+  .catch(() => {});
