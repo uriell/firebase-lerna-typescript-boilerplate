@@ -53,6 +53,8 @@ function findFunctionsChanged(originPaths, references) {
     );
   }
 
+  console.log(functionsChanged);
+
   const functionNames = functionsChanged
     .map((filepath) => path.basename(filepath, path.extname(filepath)))
     .filter((item, index, arr) => arr.indexOf(item) === index);
