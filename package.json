@@ -1,8 +1,7 @@
 {
-  "name": "firebase-lerna-boilerplate",
+  "name": "firebase-lerna-typescript-boilerplate",
   "version": "0.1.0",
-  "description": "a firebase mono repo project",
-  "repository": "git@github.com:UriellViana/firebase-lerna-boilerplate.git",
+  "description": "Boilerplate repository for Firebase apps in a mono-repo structure using Lerna",
   "license": "MIT",
   "private": true,
   "engines": {
