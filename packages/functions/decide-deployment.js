@@ -31,7 +31,7 @@ async function getCodeFilesChanged() {
 
 function findFunctionsChanged(originPaths, references) {
   const functionsChanged = [];
-  const functionFileRegex = /src\/functions/;
+  const functionFileRegex = /src\/functions\/(?!index)/;
 
   const dependents = originPaths
     .map((filepath) => references[filepath])
@@ -44,11 +44,9 @@ function findFunctionsChanged(originPaths, references) {
   );
 
   functionsChanged.push(
-    ...dependents.filter((filepath) => functionFileRegex.test(filepath))
+    ...dependents.filter((filepath) => functionFileRegex.test(filepath)),
+    ...originPaths.filter((filepath) => functionFileRegex.test(filepath))
   );
-
-  console.info(nonFunctionDependents);
-  console.info(functionsChanged);
 
   if (nonFunctionDependents.length) {
     functionsChanged.push(
@@ -60,8 +58,6 @@ function findFunctionsChanged(originPaths, references) {
     .map((filepath) => path.basename(filepath, path.extname(filepath)))
     .filter((item, index, arr) => arr.indexOf(item) === index);
 
-  console.info(functionNames);
-
   return functionNames;
 }
 
@@ -72,7 +68,7 @@ function processChangedFiles(filepaths) {
     return '';
 
   const changedFilepaths = filepaths.map((filepath) => path.resolve(filepath));
-  const functionFiles = glob.sync('src/functions/!(index).ts');
+  const functionFiles = glob.sync('src/functions/*.ts');
   const tsProgram = ts.createProgram(functionFiles, {});
   const refFileMap = tsProgram.getRefFileMap();
   const relativeReferences = [...refFileMap.entries()]
@@ -92,8 +88,6 @@ function processChangedFiles(filepaths) {
 getCodeFilesChanged()
   .then(processChangedFiles)
   .then((changedFunctionNames) => {
-    console.info(changedFunctionNames);
-
     if (!changedFunctionNames.length) {
       return console.log('');
     }
