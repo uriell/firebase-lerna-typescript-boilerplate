@@ -81,12 +81,16 @@ function processChangedFiles(filepaths) {
     .map(([origin, refFiles]) => [origin, refFiles.map((ref) => ref.file)])
     .reduce((acc, [origin, targets]) => ({ ...acc, [origin]: targets }), {});
 
-  return (
-    ':' + findFunctionsChanged(changedFilepaths, relativeReferences).join(',')
-  );
+  return findFunctionsChanged(changedFilepaths, relativeReferences);
 }
 
 getCodeFilesChanged()
   .then(processChangedFiles)
-  .then(console.log)
+  .then((changedFunctionNames) => {
+    if (!changedFunctionNames.length) {
+      return console.log('');
+    }
+
+    console.log(':' + changedFunctionNames.join(','));
+  })
   .catch(() => {});

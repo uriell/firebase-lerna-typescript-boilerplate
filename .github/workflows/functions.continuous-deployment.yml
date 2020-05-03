@@ -33,13 +33,14 @@ jobs:
         run: yarn run bootstrap --scope ${{ matrix.firebase_component }}
         if: steps.lerna_cache.outputs.cache-hit != 'true'
       - name: Decide functions to update
-        run: yarn run decide-deployment --scope ${{ matrix.firebase_component }}
+        id: functions_changed
+        run: echo "::set-output name=functions_changed::$(node packages/functions/decide-deployment.js)"
         env:
           COMPARE_URL: ${{ github.event.repository.compare_url }}
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.event.after }}
           GITHUB_TOKEN: ${{ github.token }}
       - name: Deploy ${{ matrix.firebase_component }} to Firebase
-        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}
+        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}${{ steps.functions_changed.output.functions_changed }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
