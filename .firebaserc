@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "chat-poc-app"
+    "default": "firebase-lerna-typescript-boilerplate"
   }
 }
