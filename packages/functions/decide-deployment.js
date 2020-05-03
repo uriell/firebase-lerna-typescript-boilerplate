@@ -53,9 +53,9 @@ function findFunctionsChanged(originPaths, references) {
     );
   }
 
-  const functionNames = functionsChanged.map((filepath) =>
-    path.basename(filepath, path.extname(filepath))
-  );
+  const functionNames = functionsChanged
+    .map((filepath) => path.basename(filepath, path.extname(filepath)))
+    .filter((item, index, arr) => arr.indexOf(item) === index);
 
   return functionNames;
 }
