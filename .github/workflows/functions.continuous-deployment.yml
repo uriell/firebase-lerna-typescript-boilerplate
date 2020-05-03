@@ -1,6 +1,8 @@
 name: CD (Functions)
 on:
   push:
+    branches:
+      - master
     paths:
       - 'packages/functions/**'
 jobs:
