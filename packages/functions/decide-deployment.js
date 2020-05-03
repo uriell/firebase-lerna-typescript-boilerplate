@@ -61,7 +61,7 @@ function findFunctionsChanged(originPaths, references) {
 }
 
 function processChangedFiles(filepaths) {
-  const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts)$/;
+  const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts|src\/functions\/index\.ts)$/;
 
   if (filepaths.some((filepath) => completeDeploymentRegex.test(filepath)))
     return '';
