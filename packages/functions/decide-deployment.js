@@ -83,6 +83,8 @@ function processChangedFiles(filepaths) {
     .map(([origin, refFiles]) => [origin, refFiles.map((ref) => ref.file)])
     .reduce((acc, [origin, targets]) => ({ ...acc, [origin]: targets }), {});
 
+  console.log(changedFilepaths);
+
   return findFunctionsChanged(changedFilepaths, relativeReferences);
 }
 
