@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "uriell"
+    "default": "firebase-lerna-typescript-boilerplate"
   }
 }
