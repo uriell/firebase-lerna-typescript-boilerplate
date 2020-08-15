@@ -21,10 +21,15 @@
     "test:ci": "lerna run test:ci"
   },
   "devDependencies": {
-    "firebase-tools": "8.2.0",
+    "firebase-tools": "8.7.0",
     "husky": "4.2.5",
-    "lerna": "3.20.2",
-    "lint-staged": "10.2.2"
+    "lerna": "3.22.1",
+    "lint-staged": "10.2.11"
+  },
+  "resolutions": {
+    "**/**/dot-prop": "5.2.0",
+    "**/**/lodash": "4.17.19",
+    "**/**/minimist": "1.2.5"
   },
   "husky": {
     "hooks": {
