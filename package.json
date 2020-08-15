@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "10"
+    "node": "8"
   },
   "scripts": {
     "firebase": "firebase",
@@ -22,19 +22,18 @@
   },
   "devDependencies": {
     "firebase-tools": "8.2.0",
-    "husky": "4.2.5",
-    "lerna": "3.20.2",
-    "lint-staged": "10.2.2"
-  },
-  "resolutions": {
-    "**/**/dot-prop": "5.2.0",
-    "**/**/lodash": "4.17.19",
-    "**/**/minimist": "1.2.5"
+    "husky": "3.1.0",
+    "lerna": "3.22.1",
+    "lint-staged": "9.4.3"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "resolutions": {
+    "**/**/@lerna/conventional-commits": "3.3.0",
+    "**/**/@lerna/create-symlink": "3.16.0"
   },
   "lint-staged": {
     "packages/hosting/src/**/*.{ts,tsx}": [

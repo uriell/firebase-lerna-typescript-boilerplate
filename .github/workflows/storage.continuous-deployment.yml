@@ -7,7 +7,7 @@ on:
       - 'firebase/storage.rules'
 jobs:
   deploy:
-    name: "Install > Deploy"
+    name: 'Install > Deploy'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -19,7 +19,7 @@ jobs:
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '8.x'
       - name: Restore root package dependencies
         uses: actions/cache@master
         id: cache

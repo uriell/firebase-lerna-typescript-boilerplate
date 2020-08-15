@@ -4,7 +4,7 @@ on:
     branches-ignore:
       - master
     paths:
-      - 'packages/hosting/**'
+      - "packages/hosting/**"
 jobs:
   install-dependencies:
     name: "Install >"
@@ -12,15 +12,15 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        scope: ['hosting']
-        script: ['lint', 'format', 'build', 'test:ci']
+        scope: ["hosting"]
+        script: ["lint", "format", "build", "test:ci"]
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: "10.x"
       - name: Restore lerna-style dependencies
         uses: actions/cache@master
         id: lerna_cache

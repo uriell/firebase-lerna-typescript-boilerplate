@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - 'packages/hosting/**'
+      - "packages/hosting/**"
 jobs:
   deploy:
     name: "Install > Deploy"
@@ -12,14 +12,14 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        firebase_component: ['hosting']
+        firebase_component: ["hosting"]
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: "10.x"
       - name: Restore lerna-style dependencies
         uses: actions/cache@master
         id: lerna_cache
