@@ -22,7 +22,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: test1r
-        run: ls
+        run: echo $HOME $GITHUB_WORKSPACE
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
