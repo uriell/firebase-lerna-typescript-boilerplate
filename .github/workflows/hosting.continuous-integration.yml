@@ -4,7 +4,9 @@ on:
     branches-ignore:
       - master
     paths:
+      - '.github/workflows/hosting.continuous-integration.yml'
       - 'packages/hosting/**'
+      - 'package.json'
 jobs:
   install-dependencies:
     name: 'Install >'

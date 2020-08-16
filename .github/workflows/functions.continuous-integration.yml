@@ -4,7 +4,9 @@ on:
     branches-ignore:
       - master
     paths:
+      - '.github/workflows/functions.continuous-integration.yml'
       - 'packages/functions/**'
+      - 'package.json'
 jobs:
   install-dependencies:
     name: 'Install >'
