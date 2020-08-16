@@ -3,9 +3,6 @@
   "main": "lib/index.js",
   "version": "1.0.1",
   "private": true,
-  "engines": {
-    "node": "8"
-  },
   "scripts": {
     "build": "tsc",
     "preserve": "yarn build",

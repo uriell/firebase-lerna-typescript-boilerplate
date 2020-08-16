@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "scripts": {
     "firebase": "firebase",
@@ -21,19 +21,15 @@
     "test:ci": "lerna run test:ci"
   },
   "devDependencies": {
-    "firebase-tools": "8.2.0",
-    "husky": "3.1.0",
+    "firebase-tools": "8.7.0",
+    "husky": "4.2.5",
     "lerna": "3.22.1",
-    "lint-staged": "9.4.3"
+    "lint-staged": "10.2.11"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "resolutions": {
-    "**/**/@lerna/conventional-commits": "3.3.0",
-    "**/**/@lerna/create-symlink": "3.16.0"
   },
   "lint-staged": {
     "packages/hosting/src/**/*.{ts,tsx}": [
