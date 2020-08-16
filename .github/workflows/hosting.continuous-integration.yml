@@ -19,6 +19,10 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: Setup node v10.x environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
       - name: Restore lerna-style dependencies
         uses: actions/cache@master
         id: lerna_cache
@@ -27,17 +31,9 @@ jobs:
             node_modules
             packages/hosting/node_modules
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('packages/hosting/yarn.lock') }}
-      - name: Setup node v8.x environment
-        uses: actions/setup-node@v1
-        with:
-          node-version: '8.x'
       - name: Install root package dependencies
         run: yarn install
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - name: Setup node v10.x environment
-        uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
       - name: Install inner package dependencies
         run: yarn bootstrap --scope ${{ matrix.scope }}
         if: steps.lerna_cache.outputs.cache-hit != 'true'
