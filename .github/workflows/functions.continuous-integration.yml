@@ -17,8 +17,12 @@ jobs:
         scope: ['functions']
         script: ['lint', 'format', 'build', 'test:ci']
     steps:
+      - name: test0r
+        run: ls
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: test1r
+        run: ls
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
