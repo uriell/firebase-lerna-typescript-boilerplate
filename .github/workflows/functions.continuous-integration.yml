@@ -37,9 +37,5 @@ jobs:
       - name: Install inner package dependencies
         run: yarn bootstrap --scope ${{ matrix.scope }}
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - name: Setup node v8.x environment
-        uses: actions/setup-node@v1
-        with:
-          node-version: '8.x'
       - name: Run ${{ matrix.script }} on inner packages code
         run: yarn run ${{ matrix.script }} --scope ${{ matrix.scope }}

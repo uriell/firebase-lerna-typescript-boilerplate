@@ -4,8 +4,12 @@ on:
     branches:
       - master
     paths:
-      - 'firebase/firestore.rules'
+      - '.github/workflows/firestore.continuous-deployment.yml'
       - 'firebase/firestore.indexes.json'
+      - 'firebase/firestore.rules'
+      - 'firebase.json'
+      - 'package.json'
+      - '.firebaserc'
 jobs:
   deploy:
     name: 'Install > Deploy'

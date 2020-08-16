@@ -4,7 +4,11 @@ on:
     branches:
       - master
     paths:
+      - '.github/workflows/functions.continuous-deployment.yml'
       - 'packages/functions/**'
+      - 'firebase.json'
+      - 'package.json'
+      - '.firebaserc'
 jobs:
   deploy:
     name: 'Install > Deploy'
@@ -19,7 +23,7 @@ jobs:
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
-          node-version: '8.x'
+          node-version: '10.x'
       - name: Restore lerna-style dependencies
         uses: actions/cache@master
         id: lerna_cache

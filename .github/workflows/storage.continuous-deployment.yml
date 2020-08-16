@@ -4,7 +4,11 @@ on:
     branches:
       - master
     paths:
+      - '.github/workflows/storage.continuous-deployment.yml'
       - 'firebase/storage.rules'
+      - 'firebase.json'
+      - 'package.json'
+      - '.firebaserc'
 jobs:
   deploy:
     name: 'Install > Deploy'
