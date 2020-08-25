@@ -1,0 +1,24 @@
+{
+  "name": "deployment-decision-maker",
+  "version": "1.0.0",
+  "description": "a typescript-only ast parser to detect cloud functions changed for deployment",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "prestart": "yarn build",
+    "start": "node $npm_package_main"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "2.5.7"
+  },
+  "dependencies": {
+    "@actions/core": "1.2.4",
+    "@actions/github": "4.0.0",
+    "@actions/glob": "0.1.0",
+    "globby": "11.0.1",
+    "node-fetch": "2.6.0",
+    "typescript": "3.9.7"
+  }
+}

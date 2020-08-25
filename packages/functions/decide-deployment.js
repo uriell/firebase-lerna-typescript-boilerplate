@@ -10,27 +10,27 @@ const getCompareUrl = (baseUrl, base, head) =>
     .replace('{base}', base.substr(0, 7))
     .replace('{head}', head.substr(0, 7));
 
-const fetchGithub = (url, authToken, options = {}) =>
+const fetchGithub = (url, authToken) =>
   fetch(url, {
-    headers: {
-      ...(options.headers || {}),
-      Authorization: 'Bearer' + authToken,
-    },
+    headers: { Authorization: 'Bearer ' + authToken },
   }).then((res) => res.json());
 
 async function getCodeFilesChanged() {
   const compareUrl = getCompareUrl(COMPARE_URL, BEFORE_SHA, AFTER_SHA);
   const { files } = await fetchGithub(compareUrl, GITHUB_TOKEN);
 
+  // TODO: change this into a glob environment variable
   const codeFilesRegex = /^(src|package\.json|yarn\.lock|tsconfig\.json)/;
+  const filePathPrefixRemoval = /^packages\/functions\//;
 
   return files
-    .map((file) => file.filename.replace(/^packages\/functions\//, ''))
+    .map((file) => file.filename.replace(filePathPrefixRemoval, ''))
     .filter((filename) => codeFilesRegex.test(filename));
 }
 
 function findFunctionsChanged(originPaths, references) {
   const functionsChanged = [];
+  // TODO: change this into a glob environment variable
   const functionFileRegex = /src\/functions\/(?!index)/;
 
   const dependents = originPaths
@@ -39,6 +39,7 @@ function findFunctionsChanged(originPaths, references) {
     .reduce((acc, arr) => acc.concat(arr), [])
     .filter((item, index, arr) => arr.indexOf(item) === index);
 
+  // files that are not function exports
   const nonFunctionDependents = dependents.filter(
     (filepath) => !functionFileRegex.test(filepath)
   );
@@ -62,16 +63,16 @@ function findFunctionsChanged(originPaths, references) {
 }
 
 function processChangedFiles(filepaths) {
+  // TODO: change this into a glob environment variable
   const completeDeploymentRegex = /^(package\.json|yarn\.lock|tsconfig\.json|src\/index\.ts|src\/functions\/index\.ts)$/;
+  const functionExportsGlob = 'src/functions/*.ts';
 
   if (filepaths.some((filepath) => completeDeploymentRegex.test(filepath)))
     return '';
 
   const changedFilepaths = filepaths.map((filepath) => path.resolve(filepath));
-  const functionFiles = glob.sync('src/functions/*.ts');
-  const tsProgram = ts.createProgram(functionFiles, {});
-  const refFileMap = tsProgram.getRefFileMap();
-  const relativeReferences = [...refFileMap.entries()]
+  const tsProgram = ts.createProgram(glob.sync(functionExportsGlob), {});
+  const relativeReferences = [...tsProgram.getRefFileMap().entries()]
     .filter((pair) =>
       pair[1].every(
         (ref) =>
