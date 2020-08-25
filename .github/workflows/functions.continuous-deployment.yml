@@ -4,26 +4,26 @@ on:
     # branches:
     #   - master
     paths:
-      - ".github/workflows/functions.continuous-deployment.yml"
-      - "packages/functions/**"
-      - "firebase.json"
-      - "package.json"
-      - ".firebaserc"
+      - '.github/workflows/functions.continuous-deployment.yml'
+      - 'packages/functions/**'
+      - 'firebase.json'
+      - 'package.json'
+      - '.firebaserc'
 jobs:
   deploy:
-    name: "Install > Deploy"
+    name: 'Install > Deploy'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        firebase_component: ["functions"]
+        firebase_component: ['functions']
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Setup node v10.x environment
         uses: actions/setup-node@v1
         with:
-          node-version: "10.x"
+          node-version: '10.x'
       - name: Restore lerna-style dependencies
         uses: actions/cache@master
         id: lerna_cache
@@ -38,9 +38,11 @@ jobs:
       - name: Install inner package dependencies
         run: yarn run bootstrap --scope ${{ matrix.firebase_component }}
         if: steps.lerna_cache.outputs.cache-hit != 'true'
+      - name: test0r
+        run: ls /home/runner/work/firebase-lerna-typescript-boilerplate/firebase-lerna-typescript-boilerplate/
       - name: Decide functions to update v2
         id: functions_changed_v2
-        uses: ./.github/actions/decide-function-deployment
+        uses: ./packages/deployment-decision-maker
         env:
           COMPARE_URL: ${{ github.event.repository.compare_url }}
           BEFORE_SHA: ${{ github.event.before }}
