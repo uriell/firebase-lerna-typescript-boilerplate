@@ -40,7 +40,7 @@ jobs:
         if: steps.lerna_cache.outputs.cache-hit != 'true'
       - name: Decide functions to update
         id: FUNCTIONS_CHANGED
-        uses: UriellViana/firebase-functions-deployment-decision@experimental
+        uses: UriellViana/firebase-functions-deployment-decision@v1.0.1
         with:
           GITHUB_TOKEN: ${{ github.token }}
           INDIVIDUAL_FUNCTION_GLOB: "packages/functions/src/functions/*.ts"
