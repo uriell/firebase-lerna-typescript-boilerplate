@@ -3,7 +3,6 @@ on:
   push:
     # branches:
     #   - master
-
     paths:
       - ".github/workflows/functions.continuous-deployment.yml"
       - "packages/functions/**"
@@ -39,27 +38,13 @@ jobs:
       - name: Install inner package dependencies
         run: yarn run bootstrap --scope ${{ matrix.firebase_component }}
         if: steps.lerna_cache.outputs.cache-hit != 'true'
-      - name: test0r
-        run: ls /home/runner/work/firebase-lerna-typescript-boilerplate/firebase-lerna-typescript-boilerplate/
-      - name: Decide functions to update v2
-        id: functions_changed_v2
-        uses: UriellViana/firebase-functions-deployment-decision@master
-        env:
-          COMPARE_URL: ${{ github.event.repository.compare_url }}
-          BEFORE_SHA: ${{ github.event.before }}
-          AFTER_SHA: ${{ github.event.after }}
+      - name: Decide functions to update
+        id: FUNCTIONS_CHANGED
+        uses: UriellViana/firebase-functions-deployment-decision@v1.0.0
+        with:
           GITHUB_TOKEN: ${{ github.token }}
           INDIVIDUAL_FUNCTION_GLOB: "packages/functions/src/functions/*.ts"
-          FILE_CHANGES_REGEX_FILTER: ""
-      - name: Decide functions to update
-        id: functions_changed
-        run: echo "::set-output name=functions_changed::$(cd packages/functions && node decide-deployment.js && cd ../..)"
-        env:
-          COMPARE_URL: ${{ github.event.repository.compare_url }}
-          BEFORE_SHA: ${{ github.event.before }}
-          AFTER_SHA: ${{ github.event.after }}
-          GITHUB_TOKEN: ${{ github.token }}
       - name: Deploy ${{ matrix.firebase_component }} to Firebase
-        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}${{ steps.functions_changed.outputs.functions_changed }}
+        run: yarn run deploy:ci --token=$FIREBASE_TOKEN --only ${{ matrix.firebase_component }}${{ steps.FUNCTIONS_CHANGED.outputs.FUNCTIONS_CHANGED }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
